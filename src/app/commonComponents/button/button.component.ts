@@ -9,7 +9,7 @@ import { NewserviceService } from '../../newservice.service';
   
 export class ButtonComponent implements OnInit {
     @Input() dataSave = "Output";
-    @Input() disabledStatus = true;
+    @Input() disabledStatus = '';
     subscription: Subscription;
     constructor(private messageService: NewserviceService) { }
     ngOnInit(){

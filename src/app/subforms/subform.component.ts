@@ -11,6 +11,8 @@ import { NewserviceService } from '../newservice.service';
 export class SubFormComponent implements OnInit {
     @Input() parentGroup:FormGroup;
     @Input() mandatoryStatus;
+    @Input() passValue;
+    @Output() passValueEmit = new EventEmitter();
     newFormGroup:FormGroup;
     field1: AbstractControl;
     field2: AbstractControl;
@@ -18,12 +20,10 @@ export class SubFormComponent implements OnInit {
     field4: AbstractControl;
     myTest: Observable<any>;
     subscription: Subscription;
-    mandatoruStatusUpdate:any=this.mandatoryStatus;
   constructor(private fb: FormBuilder,private messageService: NewserviceService) {
    }
 
   ngOnInit() {
-    console.log(this.mandatoryStatus);
     const creds = this.parentGroup.controls.subFormsArray as FormArray;
     this.newFormGroup = this.fb.group({
         field1: [''], //null, [Validators.required]
@@ -31,24 +31,28 @@ export class SubFormComponent implements OnInit {
         field3: [''],
         field4: ['']
       });
-      creds.push(this.newFormGroup);
-      // this.parentGroup.addControl('subFormsArray', this.newFormGroup);
-      // this.parentGroup.addControl('fields', this.newFormGroup);
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field1)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field2)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field3)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field4)
+      this.addRowMand(creds,this.newFormGroup);
+  }
+
+  addRowMand(creds,newFormGroup){
+    creds.push(newFormGroup);
+      // this.parentGroup.addControl('subFormsArray', newFormGroup);
+      // this.parentGroup.addControl('fields', newFormGroup);
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field1)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field2)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field3)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field4)
     // subscribe to home component messages
     this.subscription = this.messageService.getMessage().subscribe(message => {
-      this.mandatoruStatusUpdate = message.text;
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field1)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field2)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field3)
-      this.updateValidators(this.mandatoruStatusUpdate,this.newFormGroup.controls.field4)
+      this.mandatoryStatus = message.text;
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field1)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field2)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field3)
+      this.updateValidators(this.mandatoryStatus,newFormGroup.controls.field4)
+      
     });
   }
   updateValidators(status,field){
-    console.log(field);
     if(status == true){
       field.setValidators([Validators.required]);
       field.updateValueAndValidity();
@@ -57,5 +61,7 @@ export class SubFormComponent implements OnInit {
       field.setValidators("");
       field.updateValueAndValidity();
     }
+    // field.setValidators([Validators.required]);
+    //   field.updateValueAndValidity();
   }
 }

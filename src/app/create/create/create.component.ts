@@ -23,6 +23,11 @@ export class CreateComponent implements OnInit {
   totalLength = 1;
   constructor(private fb: FormBuilder,private messageService: NewserviceService) { }
   ngOnInit() {
+    this.getInit();
+    this.totalLengthArray()
+  }
+
+  getInit(){
     this.profileForm = this.fb.group({
       firstname: [null, [Validators.required]],
       lastname: [null, [Validators.required]],
@@ -30,15 +35,15 @@ export class CreateComponent implements OnInit {
       mandatory:[""],      
       subFormsArray: this.fb.array([]),
     });
-    this.totalLengthArray()
   }
-
   totalLengthArray(){
     for(let j=1;j<=this.totalLength;j++){
       this.n.push(j);
     }
     this.length = this.n;
-    console.log(this.profileForm.controls);
+    this.profileForm.updateValueAndValidity();
+    console.log(this.profileForm.controls.mandatory);
+    console.log(this.profileForm.controls.subFormsArray);
   }
   newFctn(value){
     console.log(this.profileForm);
@@ -50,5 +55,8 @@ export class CreateComponent implements OnInit {
   addMoreRow(){
     this.totalLength = 1;
     this.totalLengthArray();
+  }
+  newValue(newValueUpdate){
+    this.totalLength = newValueUpdate;
   }
 }
