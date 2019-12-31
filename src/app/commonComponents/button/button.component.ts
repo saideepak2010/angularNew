@@ -10,12 +10,14 @@ import { NewserviceService } from '../../newservice.service';
 export class ButtonComponent implements OnInit {
     @Input() dataSave = "Output";
     @Input() disabledStatus = '';
+    @Input() newPassMandatoryRequest = '';
     subscription: Subscription;
     constructor(private messageService: NewserviceService) { }
     ngOnInit(){
+        console.log(this.newPassMandatoryRequest);
         this.subscription = this.messageService.getMessage().subscribe(message => {
-            console.log(message);
-            console.log(this.disabledStatus);
+            // console.log(message);
+            // console.log(this.disabledStatus);
         });
     }
 }

@@ -12,7 +12,7 @@
         <input type="text" class="form-control" formControlName="age" />
     </div>
     <div class="form-group">
-        <app-subform [parentGroup]="profileForm" [mandatoryStatus]="passMandatoryRequest" *ngFor="let l of length;let i = index"></app-subform>        <!-- formArrayName="subFormsArray" -->
+        <app-subform (removePosition)="removePosition($event)" [removeAction]="removeAction" [parentGroup]="profileForm" [totalRows]="totalRows" [mandatoryStatus]="passMandatoryRequest" [indexValue]="i" *ngFor="let l of length;let i = index"></app-subform>        <!-- formArrayName="subFormsArray" -->
         <div class="addMore"><button type="button" (click)="addMoreRow()">+ Add Row</button></div>
     </div>
     <div class="checkbox">
@@ -20,7 +20,7 @@
     </div>
     <div class="input-group">
         
-        <app-button  (click)="newFctn(this.profileForm.value)" [dataSave]=buttonName [disabledStatus]="profileForm"></app-button>
+        <app-button  (click)="newFctn(this.profileForm.value)" [newPassMandatoryRequest]="passMandatoryRequest" [dataSave]=buttonName [disabledStatus]="profileForm"></app-button>
         <!-- <button type="submit" (click)="newFctn(this.profileForm.value)" [disabled]="!profileForm.valid">Submit</button> -->
     </div>
 </form>

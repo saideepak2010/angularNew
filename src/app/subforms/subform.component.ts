@@ -12,7 +12,11 @@ export class SubFormComponent implements OnInit {
     @Input() parentGroup:FormGroup;
     @Input() mandatoryStatus;
     @Input() passValue;
+    @Input() indexValue;
+    @Input() removeAction = false;
     @Output() passValueEmit = new EventEmitter();
+    @Output() removePosition = new EventEmitter();
+    @Input() totalRows: number = 1;
     newFormGroup:FormGroup;
     field1: AbstractControl;
     field2: AbstractControl;
@@ -64,4 +68,13 @@ export class SubFormComponent implements OnInit {
     // field.setValidators([Validators.required]);
     //   field.updateValueAndValidity();
   }
+  
+  removeRow(index){
+    const creds = this.parentGroup.controls.subFormsArray as FormArray;
+    var getElem = creds.value.findIndex(function(element,indexPos){
+      return indexPos === index;
+    });
+    this.removePosition.emit(getElem);
+  }
+
 }
